@@ -15,7 +15,7 @@
 <script>
 export default {
   name: "NavBar",
-}
+};
 </script>
 
 <style scoped>
@@ -24,6 +24,10 @@ export default {
   height: 44px;
   text-align: center;
   line-height: 44px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
 }
 
 .left,
