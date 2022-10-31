@@ -6,7 +6,12 @@
     <home-swiper :banners="banners" />
     <recommend-view :recommends="recommends" />
     <feature-view />
-    <tab-control class="sticky" :titles="['流行', '新款', '精选']" />
+    <tab-control
+      class="sticky"
+      :titles="['流行', '新款', '精选']"
+      @tabClick="tabClick"
+    />
+    <goods-list :goods="goods[currentType].list" />
     <ul>
       <li>1</li>
       <li>2</li>
@@ -66,48 +71,6 @@
       <li>56</li>
       <li>57</li>
       <li>58</li>
-      <li>59</li>
-      <li>60</li>
-      <li>61</li>
-      <li>62</li>
-      <li>63</li>
-      <li>64</li>
-      <li>65</li>
-      <li>66</li>
-      <li>67</li>
-      <li>68</li>
-      <li>69</li>
-      <li>70</li>
-      <li>71</li>
-      <li>72</li>
-      <li>73</li>
-      <li>74</li>
-      <li>75</li>
-      <li>76</li>
-      <li>77</li>
-      <li>78</li>
-      <li>79</li>
-      <li>80</li>
-      <li>81</li>
-      <li>82</li>
-      <li>83</li>
-      <li>84</li>
-      <li>85</li>
-      <li>86</li>
-      <li>87</li>
-      <li>88</li>
-      <li>89</li>
-      <li>90</li>
-      <li>91</li>
-      <li>92</li>
-      <li>93</li>
-      <li>94</li>
-      <li>95</li>
-      <li>96</li>
-      <li>97</li>
-      <li>98</li>
-      <li>99</li>
-      <li>100</li>
     </ul>
   </div>
 </template>
@@ -115,6 +78,7 @@
 <script>
 import NavBar from "components/common/navbar/NavBar";
 import TabControl from "components/content/tabControl/TabControl";
+import GoodsList from "components/content/goods/GoodsList";
 
 import HomeSwiper from "./childComps/HomeSwiper";
 import RecommendView from "./childComps/RecommendView";
@@ -134,6 +98,7 @@ export default {
         new: { page: 0, list: [] },
         sell: { page: 0, list: [] },
       },
+      currentType: "pop",
     };
   },
   created() {
@@ -143,6 +108,21 @@ export default {
     this.getHomeGoods("sell");
   },
   methods: {
+    // event
+    tabClick(index) {
+      switch (index) {
+        case 0:
+          this.currentType = "pop";
+          break;
+        case 1:
+          this.currentType = "new";
+          break;
+        case 2:
+          this.currentType = "sell";
+          break;
+      }
+    },
+    // request
     getHomeMultidata() {
       getHomeMultidata().then((res) => {
         this.banners = res.data.banner.list;
@@ -160,6 +140,7 @@ export default {
   components: {
     NavBar,
     TabControl,
+    GoodsList,
     HomeSwiper,
     RecommendView,
     FeatureView,
