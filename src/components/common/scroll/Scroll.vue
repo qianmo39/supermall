@@ -7,17 +7,35 @@
 </template>
 
 <script>
-import BScroll from "@better-scroll/core";
+import BScroll from "better-scroll";
 
 export default {
   name: "Scroll",
+  props: {
+    probeType: {
+      type: Number,
+      default: 0,
+    },
+  },
+  data() {
+    return {
+      scroll,
+    };
+  },
   mounted() {
-    const bs = new BScroll(this.$refs.wrapper, {
-      probeType: 3,
+    this.scroll = new BScroll(this.$refs.wrapper, {
+      probeType: this.probeType,
       pullUpLoad: true,
       click: true,
-      mouseWheel: true,
     });
+    this.scroll.on("scroll", (position) => {
+      this.$emit("scroll", position);
+    });
+  },
+  methods: {
+    scrollTo(x, y, time = 500) {
+      this.scroll.scrollTo(x, y, time);
+    },
   },
 };
 </script>

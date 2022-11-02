@@ -3,7 +3,12 @@
     <nav-bar class="home-nav">
       <div slot="center">购物街</div>
     </nav-bar>
-    <scroll class="content">
+    <scroll
+      class="content"
+      ref="scroll"
+      :probe-type="3"
+      @scroll="contentScroll"
+    >
       <home-swiper :banners="banners" />
       <recommend-view :recommends="recommends" />
       <feature-view />
@@ -14,6 +19,7 @@
       />
       <goods-list :goods="goods[currentType].list" />
     </scroll>
+    <back-top v-show="showBackTop" @click.native="backClick" />
   </div>
 </template>
 
@@ -22,6 +28,7 @@ import NavBar from "components/common/navbar/NavBar";
 import Scroll from "components/common/scroll/Scroll";
 import TabControl from "components/content/tabControl/TabControl";
 import GoodsList from "components/content/goods/GoodsList";
+import BackTop from "components/content/backTop/BackTop";
 
 import HomeSwiper from "./childComps/HomeSwiper";
 import RecommendView from "./childComps/RecommendView";
@@ -42,6 +49,7 @@ export default {
         sell: { page: 0, list: [] },
       },
       currentType: "pop",
+      showBackTop: false,
     };
   },
   created() {
@@ -65,6 +73,12 @@ export default {
           break;
       }
     },
+    backClick() {
+      this.$refs.scroll.scrollTo(0, 0);
+    },
+    contentScroll(position) {
+      this.showBackTop = (-position.y) > 1000;
+    },
     // request
     getHomeMultidata() {
       getHomeMultidata().then((res) => {
@@ -85,6 +99,7 @@ export default {
     Scroll,
     TabControl,
     GoodsList,
+    BackTop,
     HomeSwiper,
     RecommendView,
     FeatureView,
@@ -100,11 +115,6 @@ export default {
 .home-nav {
   background-color: var(--color-tint);
   color: #fff;
-}
-
-.sticky {
-  position: sticky;
-  top: 44px;
 }
 
 .content {
