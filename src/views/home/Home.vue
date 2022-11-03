@@ -38,6 +38,8 @@ import FeatureView from "./childComps/FeatureView";
 
 import { getHomeMultidata, getHomeGoods } from "network/home";
 
+import { debounce } from "common/utils";
+
 export default {
   name: "Home",
   data() {
@@ -59,6 +61,12 @@ export default {
     this.getHomeGoods("pop");
     this.getHomeGoods("new");
     this.getHomeGoods("sell");
+  },
+  mounted() {
+    const refresh = debounce(this.$refs.scroll.refresh, 500);
+    this.$bus.$on("itemImgLoad", () => {
+      refresh();
+    });
   },
   methods: {
     // event
@@ -115,6 +123,7 @@ export default {
 
 <style scoped>
 #home {
+  position: relative;
   height: 100vh;
 }
 
@@ -124,8 +133,9 @@ export default {
 }
 
 .content {
-  height: calc(100% - 93px);
   overflow: hidden;
-  margin-top: 44px;
+  position: absolute;
+  top: 44px;
+  bottom: 49px;
 }
 </style>
