@@ -8,6 +8,8 @@
       ref="scroll"
       :probe-type="3"
       @scroll="contentScroll"
+      :pull-up-load="true"
+      @pullingUp="loadMore"
     >
       <home-swiper :banners="banners" />
       <recommend-view :recommends="recommends" />
@@ -77,7 +79,11 @@ export default {
       this.$refs.scroll.scrollTo(0, 0);
     },
     contentScroll(position) {
-      this.showBackTop = (-position.y) > 1000;
+      this.showBackTop = -position.y > 1000;
+    },
+    loadMore() {
+      this.getHomeGoods(this.currentType);
+      this.$refs.scroll.finishPullUp();
     },
     // request
     getHomeMultidata() {
