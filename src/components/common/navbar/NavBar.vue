@@ -24,10 +24,6 @@ export default {
   height: 44px;
   text-align: center;
   line-height: 44px;
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
   z-index: 1;
 }
 

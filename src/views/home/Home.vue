@@ -3,6 +3,13 @@
     <nav-bar class="home-nav">
       <div slot="center">购物街</div>
     </nav-bar>
+    <tab-control
+      :titles="['流行', '新款', '精选']"
+      @tabClick="tabClick"
+      ref="tabControl1"
+      v-show="showTabControl"
+      class="tab-control"
+    />
     <scroll
       class="content"
       ref="scroll"
@@ -11,13 +18,13 @@
       :pull-up-load="true"
       @pullingUp="loadMore"
     >
-      <home-swiper :banners="banners" />
+      <home-swiper :banners="banners" @swiperImgLoad="swiperImgLoad" />
       <recommend-view :recommends="recommends" />
       <feature-view />
       <tab-control
-        class="sticky"
         :titles="['流行', '新款', '精选']"
         @tabClick="tabClick"
+        ref="tabControl2"
       />
       <goods-list :goods="goods[currentType].list" />
     </scroll>
@@ -54,6 +61,8 @@ export default {
       },
       currentType: "pop",
       showBackTop: false,
+      tabOffsetTop: 0,
+      showTabControl: false,
     };
   },
   created() {
@@ -82,16 +91,22 @@ export default {
           this.currentType = "sell";
           break;
       }
+      this.$refs.tabControl1.currentIndex = index;
+      this.$refs.tabControl2.currentIndex = index;
     },
     backClick() {
       this.$refs.scroll.scrollTo(0, 0);
     },
     contentScroll(position) {
       this.showBackTop = -position.y > 1000;
+      this.showTabControl = -position.y > this.tabOffsetTop;
     },
     loadMore() {
       this.getHomeGoods(this.currentType);
       this.$refs.scroll.finishPullUp();
+    },
+    swiperImgLoad() {
+      this.tabOffsetTop = this.$refs.tabControl2.$el.offsetTop;
     },
     // request
     getHomeMultidata() {
@@ -137,5 +152,10 @@ export default {
   position: absolute;
   top: 44px;
   bottom: 49px;
+}
+
+.tab-control {
+  position: relative;
+  z-index: 1;
 }
 </style>
