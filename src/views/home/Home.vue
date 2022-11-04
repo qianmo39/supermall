@@ -63,6 +63,7 @@ export default {
       showBackTop: false,
       tabOffsetTop: 0,
       showTabControl: false,
+      saveY: 0,
     };
   },
   created() {
@@ -76,6 +77,13 @@ export default {
     this.$bus.$on("itemImgLoad", () => {
       refresh();
     });
+  },
+  activated() {
+    this.$refs.scroll.scrollTo(0, this.saveY, 0);
+    this.$refs.scroll.refresh();
+  },
+  deactivated() {
+    this.saveY = this.$refs.scroll.getY();
   },
   methods: {
     // event
