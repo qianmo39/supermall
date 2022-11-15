@@ -34,6 +34,8 @@ import {
   GoodsParams,
 } from "network/detail";
 
+import { itemImgListenerMixin } from "common/mixins";
+
 export default {
   name: "Detail",
   data() {
@@ -46,6 +48,7 @@ export default {
       paramsInfo: {},
       commentInfo: {},
       recommends: [],
+      itemImgListener: null,
     };
   },
   created() {
@@ -69,7 +72,6 @@ export default {
       }
     });
     getRecommend().then((res) => {
-      console.log(res);
       this.recommends = res.data.list;
     });
   },
@@ -89,6 +91,10 @@ export default {
     GoodsList,
     Scroll,
   },
+  destroyed() {
+    this.$bus.$off("itemImgLoad", this.itemImgListener);
+  },
+  mixins: [itemImgListenerMixin],
 };
 </script>
 

@@ -45,7 +45,7 @@ import FeatureView from "./childComps/FeatureView";
 
 import { getHomeMultidata, getHomeGoods } from "network/home";
 
-import { debounce } from "common/utils";
+import { itemImgListenerMixin } from "common/mixins";
 
 export default {
   name: "Home",
@@ -64,6 +64,7 @@ export default {
       tabOffsetTop: 0,
       showTabControl: false,
       saveY: 0,
+      itemImgListener: null,
     };
   },
   created() {
@@ -72,18 +73,13 @@ export default {
     this.getHomeGoods("new");
     this.getHomeGoods("sell");
   },
-  mounted() {
-    const refresh = debounce(this.$refs.scroll.refresh, 500);
-    this.$bus.$on("itemImgLoad", () => {
-      refresh();
-    });
-  },
   activated() {
     this.$refs.scroll.scrollTo(0, this.saveY, 0);
     this.$refs.scroll.refresh();
   },
   deactivated() {
     this.saveY = this.$refs.scroll.getY();
+    this.$bus.$off("itemImgLoad", this.itemImgListener);
   },
   methods: {
     // event
@@ -141,6 +137,7 @@ export default {
     RecommendView,
     FeatureView,
   },
+  mixins: [itemImgListenerMixin],
 };
 </script>
 
