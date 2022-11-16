@@ -55,6 +55,12 @@ export default {
       return this.scroll ? this.scroll.y : 0;
     },
   },
+  watch: {
+    scrollIndex() {
+      this.currentIndex = this.scrollIndex;
+      console.log(this.scrollIndex);
+    }
+  }
 };
 </script>
 

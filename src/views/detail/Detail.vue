@@ -1,14 +1,14 @@
 <template>
   <div id="detail">
-    <detail-nav-bar class="detail-nav" />
-    <scroll class="content" ref="scroll">
+    <detail-nav-bar class="detail-nav" @titleClick="titleClick" ref="navBar" />
+    <scroll class="content" ref="scroll" @scroll="contentScroll" :probeType="3">
       <detail-swiper :topImgs="topImgs" />
       <detail-base-info :goods="goods" />
       <detail-shop-info :shop="shop" />
       <detail-goods-info :detail-info="detailInfo" @imgLoad="imgLoad" />
-      <detail-params-info :params-info="paramsInfo" />
-      <detail-comment-info :comment-info="commentInfo" />
-      <goods-list :goods="recommends" />
+      <detail-params-info ref="params" :params-info="paramsInfo" />
+      <detail-comment-info ref="comment" :comment-info="commentInfo" />
+      <goods-list ref="recommend" :goods="recommends" />
     </scroll>
   </div>
 </template>
@@ -49,6 +49,8 @@ export default {
       commentInfo: {},
       recommends: [],
       itemImgListener: null,
+      topYs: [],
+      navIndex: null,
     };
   },
   created() {
@@ -78,6 +80,30 @@ export default {
   methods: {
     imgLoad() {
       this.$refs.scroll.refresh();
+
+      this.topYs = [];
+      this.topYs.push(0);
+      this.topYs.push(this.$refs.params.$el.offsetTop);
+      this.topYs.push(this.$refs.comment.$el.offsetTop);
+      this.topYs.push(this.$refs.recommend.$el.offsetTop);
+      this.topYs.push(Infinity);
+    },
+    titleClick(index) {
+      this.$refs.scroll.scrollTo(0, -this.topYs[index], 200);
+    },
+    contentScroll(position) {
+      const positionY = -position.y;
+      const length = this.topYs.length;
+      for (let i = 0; i < length - 1; i++) {
+        if (
+          this.navIndex !== i &&
+          positionY >= this.topYs[i] &&
+          positionY < this.topYs[i + 1]
+        ) {
+          this.navIndex = i;
+          this.$refs.navBar.currentIndex = this.navIndex;
+        }
+      }
     },
   },
   components: {
