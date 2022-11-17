@@ -11,6 +11,7 @@
       <goods-list ref="recommend" :goods="recommends" />
     </scroll>
     <detail-bottom-bar />
+    <back-top v-show="showBackTop" @click.native="backClick" />
   </div>
 </template>
 
@@ -36,7 +37,7 @@ import {
   GoodsParams,
 } from "network/detail";
 
-import { itemImgListenerMixin } from "common/mixins";
+import { itemImgListenerMixin, backTopMixin } from "common/mixins";
 
 export default {
   name: "Detail",
@@ -50,7 +51,6 @@ export default {
       paramsInfo: {},
       commentInfo: {},
       recommends: [],
-      itemImgListener: null,
       topYs: [],
       navIndex: null,
     };
@@ -71,7 +71,7 @@ export default {
         data.itemParams.info,
         data.itemParams.rule
       );
-      if (data.rate.Crate !== 0) {
+      if (data.rate.Crate) {
         this.commentInfo = data.rate.list[0];
       }
     });
@@ -94,6 +94,7 @@ export default {
       this.$refs.scroll.scrollTo(0, -this.topYs[index], 200);
     },
     contentScroll(position) {
+      this.showBackTop = -position.y > 1000;
       const positionY = -position.y;
       const length = this.topYs.length;
       for (let i = 0; i < length - 1; i++) {
@@ -123,7 +124,7 @@ export default {
   destroyed() {
     this.$bus.$off("itemImgLoad", this.itemImgListener);
   },
-  mixins: [itemImgListenerMixin],
+  mixins: [itemImgListenerMixin, backTopMixin],
 };
 </script>
 

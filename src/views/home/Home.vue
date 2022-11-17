@@ -37,7 +37,6 @@ import NavBar from "components/common/navbar/NavBar";
 import Scroll from "components/common/scroll/Scroll";
 import TabControl from "components/content/tabControl/TabControl";
 import GoodsList from "components/content/goods/GoodsList";
-import BackTop from "components/content/backTop/BackTop";
 
 import HomeSwiper from "./childComps/HomeSwiper";
 import RecommendView from "./childComps/RecommendView";
@@ -45,7 +44,7 @@ import FeatureView from "./childComps/FeatureView";
 
 import { getHomeMultidata, getHomeGoods } from "network/home";
 
-import { itemImgListenerMixin } from "common/mixins";
+import { itemImgListenerMixin, backTopMixin } from "common/mixins";
 
 export default {
   name: "Home",
@@ -60,11 +59,9 @@ export default {
         sell: { page: 0, list: [] },
       },
       currentType: "pop",
-      showBackTop: false,
       tabOffsetTop: 0,
       showTabControl: false,
       saveY: 0,
-      itemImgListener: null,
     };
   },
   created() {
@@ -98,9 +95,6 @@ export default {
       this.$refs.tabControl1.currentIndex = index;
       this.$refs.tabControl2.currentIndex = index;
     },
-    backClick() {
-      this.$refs.scroll.scrollTo(0, 0);
-    },
     contentScroll(position) {
       this.showBackTop = -position.y > 1000;
       this.showTabControl = -position.y > this.tabOffsetTop;
@@ -132,12 +126,11 @@ export default {
     Scroll,
     TabControl,
     GoodsList,
-    BackTop,
     HomeSwiper,
     RecommendView,
     FeatureView,
   },
-  mixins: [itemImgListenerMixin],
+  mixins: [itemImgListenerMixin, backTopMixin],
 };
 </script>
 
