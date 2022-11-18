@@ -10,7 +10,7 @@
       <detail-comment-info ref="comment" :comment-info="commentInfo" />
       <goods-list ref="recommend" :goods="recommends" />
     </scroll>
-    <detail-bottom-bar />
+    <detail-bottom-bar @addToCart="addToCart" />
     <back-top v-show="showBackTop" @click.native="backClick" />
   </div>
 </template>
@@ -92,6 +92,16 @@ export default {
     },
     titleClick(index) {
       this.$refs.scroll.scrollTo(0, -this.topYs[index], 200);
+    },
+    addToCart() {
+      const product = {};
+      product.image = this.topImgs[0];
+      product.title = this.goods.title;
+      product.desc = this.goods.desc;
+      product.price = this.goods.realPrice;
+      product.iid = this.iid;
+
+      this.$store.dispatch("addToCart", product);
     },
     contentScroll(position) {
       this.showBackTop = -position.y > 1000;
