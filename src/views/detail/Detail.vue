@@ -26,8 +26,9 @@ import DetailCommentInfo from "./childComps/DetailCommentInfo";
 import DetailBottomBar from "./childComps/DetailBottomBar";
 
 import GoodsList from "components/content/goods/GoodsList";
-
 import Scroll from "components/common/scroll/Scroll";
+
+import { mapActions } from "vuex";
 
 import {
   getDetail,
@@ -80,6 +81,9 @@ export default {
     });
   },
   methods: {
+    ...mapActions({
+      addCart: "addToCart",
+    }),
     imgLoad() {
       this.$refs.scroll.refresh();
 
@@ -101,7 +105,9 @@ export default {
       product.price = this.goods.realPrice;
       product.iid = this.iid;
 
-      this.$store.dispatch("addToCart", product);
+      this.addCart(product).then((res) => {
+        this.$toast.show(res);
+      });
     },
     contentScroll(position) {
       this.showBackTop = -position.y > 1000;

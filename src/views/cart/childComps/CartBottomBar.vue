@@ -7,7 +7,7 @@
     />
     <span>全选</span>
     <span class="total-price">合计：￥{{ totalPrice }}</span>
-    <span class="buy-product">付款({{ checkLength }})</span>
+    <span class="buy-product" @click="payClick">付款({{ checkLength }})</span>
   </div>
 </template>
 
@@ -27,6 +27,11 @@ export default {
         this.cartList.forEach((item) => {
           item.checked = true;
         });
+      }
+    },
+    payClick() {
+      if (!this.checkLength) {
+        this.$toast.show("请选中商品");
       }
     },
   },
