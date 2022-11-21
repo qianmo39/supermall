@@ -1,6 +1,10 @@
 <template>
   <div class="bottom-menu">
-    <check-button class="check-button" />
+    <check-button
+      class="check-button"
+      :is-checked="isSelectAll"
+      @click.native="selectAll"
+    />
     <span>全选</span>
     <span class="total-price">合计：￥{{ totalPrice }}</span>
     <span class="buy-product">付款({{ checkLength }})</span>
@@ -13,6 +17,19 @@ import { mapGetters } from "vuex";
 
 export default {
   name: "CartBottomBar",
+  methods: {
+    selectAll() {
+      if (this.isSelectAll) {
+        this.cartList.forEach((item) => {
+          item.checked = false;
+        });
+      } else {
+        this.cartList.forEach((item) => {
+          item.checked = true;
+        });
+      }
+    },
+  },
   computed: {
     ...mapGetters(["cartList"]),
     totalPrice() {
@@ -23,6 +40,12 @@ export default {
     },
     checkLength() {
       return this.cartList.filter((item) => item.checked).length;
+    },
+    isSelectAll() {
+      if (this.cartList.length === 0) {
+        return false;
+      }
+      return this.checkLength === this.cartList.length;
     },
   },
   components: {
