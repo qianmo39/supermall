@@ -1,4 +1,5 @@
 import Vue from "vue";
+import FastClick from "fastclick";
 import App from "./App.vue";
 import router from "./router";
 import store from "./store";
@@ -9,6 +10,8 @@ Vue.config.productionTip = false;
 Vue.prototype.$bus = new Vue();
 
 Vue.use(toast);
+
+FastClick.attach(document.body);
 
 new Vue({
   render: (h) => h(App),
