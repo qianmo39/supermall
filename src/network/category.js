@@ -6,9 +6,9 @@ export function getCategory() {
   });
 }
 
-export function getSubcategory(mailKey) {
+export function getSubcategory(maitKey) {
   return request({
     url: "/subcategory",
-    param: { mailKey },
+    params: { maitKey },
   });
 }
